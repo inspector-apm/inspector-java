@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>dev.inspector</groupId>
-  <artifactId>inspector-agent</artifactId>
+  <artifactId>agent</artifactId>
   <version>0.0.1</version>
 
-  <name>inspector-agent</name>
+  <name>agent</name>
 
   <description>
     This is a library to install an inspector agent that silently monitors transactions in your application. Demo Version

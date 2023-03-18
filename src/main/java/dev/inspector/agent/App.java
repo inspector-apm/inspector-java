@@ -1,4 +1,4 @@
-package dev.inspector;
+package dev.inspector.agent;
 
 /**
  * Hello world!
