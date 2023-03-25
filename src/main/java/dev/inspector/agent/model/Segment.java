@@ -1,5 +1,6 @@
 package dev.inspector.agent.model;
 
+import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -45,7 +46,17 @@ public class Segment implements Transportable {
 
     @Override
     public JSONObject toTransport() {
-        return null;
+        return new JsonBuilder()
+            .put("model", this.model)
+            .put("type", this.type)
+            .put("label", this.label)
+            .put("timestamp", Math.round(this.timestamp / 1000.0))
+            .put("start",Math.round(this.start / 1000.0))
+            .put("duration", this.duration)
+            .put("transaction", new JsonBuilder()
+                    .put("hash",this.transaction.getHash())
+                    .build())
+            .build();
     }
 }
 

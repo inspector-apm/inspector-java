@@ -3,7 +3,7 @@ package dev.inspector.agent.model;
 public class Config {
 
     private String ingestionKey;
-    private String url = "ingest.inspector.dev";
+    private String url = "https://ingest.inspector.dev";
     private boolean enabled = true;
     private boolean autoWiring = true;
 

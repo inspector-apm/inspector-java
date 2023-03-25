@@ -3,6 +3,7 @@ package dev.inspector.agent.model;
 public class TransactionIdentifier {
     public String hash;
     public long timestamp;
+    //TODO: Add name parameter
 
     public TransactionIdentifier(String hash, long timestamp){
         this.hash = hash;
