@@ -72,7 +72,7 @@ public class Transaction implements Transportable {
 
 
     public TransactionIdentifier getBasicTransactionInfo(){
-        return new TransactionIdentifier(this.hash, this.timestamp);
+        return new TransactionIdentifier(this.hash, this.timestamp, this.name);
     }
 
     @Override

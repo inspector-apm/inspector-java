@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class Segment implements Transportable {
 
-    private String model = "Segment";
+    private String model = "segment";
     private String label;
     private String type;
     private TransactionIdentifier transaction;
@@ -36,7 +36,7 @@ public class Segment implements Transportable {
     }
 
     public void end(){
-        this.end(new Date().getTime());
+        this.end(new Date().getTime() - this.timestamp);
     }
 
     public void end(long duration){
