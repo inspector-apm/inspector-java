@@ -71,6 +71,10 @@ public class Inspector {
         return this.transport.getQueueSize() < this.conf.getMaxEntries();
     }
 
+    public <T> CompletableFuture<T> addSegment(Supplier<CompletableFuture<T>> fn, String type, String label) {
+        return addSegment(fn, type, label, false);
+    }
+
     public <T> CompletableFuture<T> addSegment(Supplier<CompletableFuture<T>> fn, String type, String label, boolean throwE) {
         Segment segment = startSegment(type, label);
         try {

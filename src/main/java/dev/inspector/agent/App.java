@@ -17,9 +17,9 @@ public class App
         Inspector inspector = new Inspector(config);
 
         inspector.startTransaction("Test Java lol");
-        CompletableFuture<Segment> futureResult =  inspector.addSegment(segment -> {
+        CompletableFuture<Segment> futureResult =  inspector.addSegment(() -> {
             System.out.println("Segment...");
-            return segment;
+            return CompletableFuture.completedFuture(new Segment(inspector.transaction().getBasicTransactionInfo()));
         }, "test async", "test label");
 
         futureResult.thenAccept(result -> {
