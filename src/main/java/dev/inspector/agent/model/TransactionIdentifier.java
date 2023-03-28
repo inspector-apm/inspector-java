@@ -3,11 +3,12 @@ package dev.inspector.agent.model;
 public class TransactionIdentifier {
     public String hash;
     public long timestamp;
-    //TODO: Add name parameter
+    public String name;
 
-    public TransactionIdentifier(String hash, long timestamp){
+    public TransactionIdentifier(String hash, long timestamp, String name){
         this.hash = hash;
         this.timestamp = timestamp;
+        this.name = name;
     }
 
     public String getHash() {
@@ -24,5 +25,13 @@ public class TransactionIdentifier {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
