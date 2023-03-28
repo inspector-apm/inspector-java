@@ -1,5 +1,6 @@
 package dev.inspector.agent.model;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.ArrayList;
 public class Inspector {
@@ -48,6 +49,7 @@ public class Inspector {
         dataArray.add(data);
         this.addEntries(dataArray);
     }
+
     public void addEntries(ArrayList<Transportable> data){
         data.forEach(entry -> {
             if(this.canAddEntry()){
@@ -71,36 +73,26 @@ public class Inspector {
         return this.transport.getQueueSize() < this.conf.getMaxEntries();
     }
 
-    public <T> CompletableFuture<T> addSegment(Supplier<CompletableFuture<T>> fn, String type, String label) {
-        return addSegment(fn, type, label, false);
-    }
-
-    public <T> CompletableFuture<T> addSegment(Supplier<CompletableFuture<T>> fn, String type, String label, boolean throwE) {
+    public Segment addSegment(ElaborateSegment fn, String type, String label, boolean throwE) {
         Segment segment = startSegment(type, label);
         try {
-            return fn.get()
-                    .whenComplete((result, exception) -> {
-                        if (exception != null) {
-                            reportException(exception);
-                            if (throwE) {
-                                throw new RuntimeException(exception);
-                            }
-                        }
-                        segment.end();
-                    });
+            return fn.execute(segment);
         } catch (Exception e) {
-            segment.end();
             reportException(e);
-            if (throwE) {
-                throw new RuntimeException(e);
-            } else {
-                return CompletableFuture.completedFuture(null);
-            }
+            return segment;
+        } finally {
+            segment.end();
         }
     }
 
     private void reportException(Throwable e) {
-        System.out.println("Error...");
+        Segment segment = startSegment("exception", e.getMessage());
+
+        //TODO: Implement error reporting
+//        const e = new IError(error, this._transaction);
+//        await e.populateError();
+//        this.addEntries(e);
+
     }
 
 }
