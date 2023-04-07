@@ -57,7 +57,7 @@ public class Segment implements Transportable {
             .put("type", this.type)
             .put("label", this.label)
             .put("timestamp", Math.round(this.timestamp / 1000.0))
-            .put("start",Math.round(this.start / 1000.0))
+            .put("start",this.start)
             .put("duration", this.duration)
             .put("context", this.context)
             .put("transaction", new JsonBuilder()

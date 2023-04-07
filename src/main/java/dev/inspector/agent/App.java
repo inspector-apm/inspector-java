@@ -12,24 +12,33 @@ public class App {
         Transaction transaction = inspector.startTransaction("Test Java segment 1");
         transaction.setResult("SUCCESS");
 
+        waitMillis(1000);
+
         Segment segmentRef = inspector.addSegment((segment) -> {
-
-            long now = new Date().getTime();
-            while (new Date().getTime() < now + 1000) {
-                System.out.println("Wait");
-            }
-
+            waitMillis(2000);
             String ptr = null;
             boolean x = ptr.equals("gfg");
-
             return segment;
         }, "test async", "test label", false);
-
         segmentRef.addContext("view1", new JsonBuilder().put("test", "test2").build());
 
-        // TODO: Check if we can implement an auto flush
+        waitMillis(3000);
+
+        Segment segmentRef2 = inspector.addSegment((segment) -> {
+            waitMillis(2000);
+            return segment;
+        }, "test async2", "test label2", false);
+
+
         // See the node env
         inspector.flush();
 
+    }
+
+
+    public static void waitMillis(long x){
+        System.out.println("Waiting for " + x);
+        long now = new Date().getTime();
+        while (new Date().getTime() < now + x) {}
     }
 }
