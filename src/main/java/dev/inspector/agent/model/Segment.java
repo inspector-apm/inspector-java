@@ -4,6 +4,7 @@ import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class Segment implements Transportable {
 
@@ -14,9 +15,10 @@ public class Segment implements Transportable {
     private long start;
     private long timestamp;
     private long duration;
+    private HashMap<String , JSONObject> context = new HashMap();
 
 
-    public Segment(TransactionIdentifier identifier){
+    public Segment(TransactionIdentifier identifier)  {
         this(identifier, "process", null);
     }
 
@@ -43,6 +45,10 @@ public class Segment implements Transportable {
         this.duration = duration;
     }
 
+    public void addContext(String label, JSONObject data){
+        this.context.put(label, data);
+    }
+
 
     @Override
     public JSONObject toTransport() {
@@ -53,9 +59,10 @@ public class Segment implements Transportable {
             .put("timestamp", Math.round(this.timestamp / 1000.0))
             .put("start",Math.round(this.start / 1000.0))
             .put("duration", this.duration)
+            .put("context", this.context)
             .put("transaction", new JsonBuilder()
-                    .put("hash",this.transaction.getHash())
-                    .build())
+                .put("hash",this.transaction.getHash())
+                .build())
             .build();
     }
 }

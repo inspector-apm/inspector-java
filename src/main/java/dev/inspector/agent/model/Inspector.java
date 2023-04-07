@@ -1,7 +1,4 @@
 package dev.inspector.agent.model;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.ArrayList;
 public class Inspector {
 
@@ -86,12 +83,14 @@ public class Inspector {
     }
 
     private void reportException(Throwable e) {
+        System.out.println("Reportexception triggered");
         Segment segment = startSegment("exception", e.getMessage());
 
-        //TODO: Implement error reporting
-//        const e = new IError(error, this._transaction);
-//        await e.populateError();
-//        this.addEntries(e);
+        IError error = new IError(e, transaction.getBasicTransactionInfo());
+        //TODO: Populate
+
+        addEntries(error);
+        segment.end();
 
     }
 

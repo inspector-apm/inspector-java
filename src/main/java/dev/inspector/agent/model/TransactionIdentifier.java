@@ -1,5 +1,8 @@
 package dev.inspector.agent.model;
 
+import dev.inspector.agent.utility.JsonBuilder;
+import org.json.JSONObject;
+
 public class TransactionIdentifier {
     public String hash;
     public long timestamp;
@@ -33,5 +36,13 @@ public class TransactionIdentifier {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public JSONObject toObject(){
+        return new JsonBuilder()
+            .put("hash", hash)
+            .put("timestamp", timestamp)
+            .put("name", name)
+            .build();
     }
 }

@@ -14,51 +14,58 @@ public class Config {
         this.ingestionKey = ingestionKey;
     }
 
+
     public String getIngestionKey() {
         return ingestionKey;
     }
 
-    public void setIngestionKey(String ingestionKey) {
+    public Config setIngestionKey(String ingestionKey) {
         this.ingestionKey = ingestionKey;
+        return this;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public Config setUrl(String url) {
         this.url = url;
+        return this;
     }
 
     public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public Config setEnabled(boolean enabled) {
         this.enabled = enabled;
+        return this;
     }
 
     public boolean isAutoWiring() {
         return autoWiring;
     }
 
-    public void setAutoWiring(boolean autoWiring) {
+    public Config setAutoWiring(boolean autoWiring) {
         this.autoWiring = autoWiring;
+        return this;
     }
 
     public int getMaxEntries() {
         return maxEntries;
     }
 
-    public void setMaxEntries(int maxEntries) {
+    public Config setMaxEntries(int maxEntries) {
         this.maxEntries = maxEntries;
+        return this;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public Config setVersion(String version) {
         this.version = version;
+        return this;
     }
 }

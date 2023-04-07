@@ -21,7 +21,7 @@ public class Transaction implements Transportable {
     private Long duration;
     private double memoryPeak;
 
-    private HashMap<String , Object> context = new HashMap();
+    private HashMap<String , JSONObject> context = new HashMap();
 
 
     public Transaction(String name) {
@@ -43,16 +43,11 @@ public class Transaction implements Transportable {
         this.timestamp = date;
     }
 
-
-    //TODO: Create Abstract class
-    // https://github.com/inspector-apm/inspector-php/blob/master/src/Models/PerformanceModel.php
     public void end(){
-        //TODO: Add check fo started request
         this.end(new Date().getTime() - this.timestamp);
     }
 
     public void end(long duration){
-        //TODO: Validate negative duration
         this.duration = duration;
         this.memoryPeak = this.getMemoryPeak();
     }
@@ -62,7 +57,7 @@ public class Transaction implements Transportable {
         return heapMemoryUsage.getUsed();
     }
 
-    public void addContext(String label, Object data){
+    public void addContext(String label, JSONObject data){
         this.context.put(label, data);
     }
 
