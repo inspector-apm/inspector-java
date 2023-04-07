@@ -1,7 +1,6 @@
 package dev.inspector.agent;
 
 import dev.inspector.agent.model.*;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
 import java.util.Date;
@@ -15,7 +14,6 @@ public class App
     public static void main( String[] args )
     {
 
-        Security.addProvider(new BouncyCastleProvider());
 
 
         Config config = new Config("81e6d4df93e1bfad8e9f3c062022e3a0d8a77dce");
