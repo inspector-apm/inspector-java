@@ -24,7 +24,7 @@ public class Inspector {
             throw new Error("No active transaction found");
         }
 
-        Segment segment = new Segment(this.transaction.getBasicTransactionInfo(),type, label);
+        Segment segment = new Segment(this.transaction.getBasicTransactionInfo(),type, "Test label 1");
         segment.start();
 
         this.addEntries(segment);
@@ -87,8 +87,6 @@ public class Inspector {
         Segment segment = startSegment("exception", e.getMessage());
 
         IError error = new IError(e, transaction.getBasicTransactionInfo());
-        //TODO: Populate
-
         addEntries(error);
         segment.end();
 

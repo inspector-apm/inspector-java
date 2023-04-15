@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class IError  implements  Transportable{
 
-    private long timestamp = new Date().getTime();
+    private long timestamp =  Math.round(new Date().getTime() / 1000.0);
     private TransactionIdentifier transaction;
     private Throwable error;
     private boolean handled;
@@ -28,7 +28,7 @@ public class IError  implements  Transportable{
     @Override
     public JSONObject toTransport() {
 
-        //TODO: What is the error code?
+        //TODO: File + line => stacktrace[0]
 
         return new JsonBuilder()
                 .put("model", "error")

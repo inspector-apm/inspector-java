@@ -14,7 +14,6 @@ public class Transaction implements Transportable {
     private String type = "request";
     private String name;
     private String hash = System.currentTimeMillis() + "" + (int) (Math.random() * 100);
-    private String http; // TBD Object
     private User user;
     private String result = "";
     private long timestamp;
@@ -91,7 +90,6 @@ public class Transaction implements Transportable {
             .put("result", this.result)
             .put("memory_peak", this.memoryPeak)
             .put("user", this.user)
-            .put("http", this.http)
             .put("host", new JsonBuilder()
                     .put("hostname",hostname)
                     .build())
