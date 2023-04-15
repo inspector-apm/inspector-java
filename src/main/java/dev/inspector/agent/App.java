@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class App {
     public static void main(String[] args) {
-
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> onShutdown()));
         Config config = new Config("81e6d4df93e1bfad8e9f3c062022e3a0d8a77dce");
         Inspector inspector = new Inspector(config);
         Transaction transaction = inspector.startTransaction("Test Java segment 1");
@@ -32,6 +32,10 @@ public class App {
         // See the node env
         inspector.flush();
 
+    }
+
+    private static void onShutdown() {
+        System.out.println("qui c'è il flush finale");
     }
 
 
