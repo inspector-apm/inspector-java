@@ -45,7 +45,6 @@ public class Segment implements Transportable {
         this.duration = duration;
     }
 
-    //TODO: Context Class
     public void addContext(String label, JSONObject data){
         this.context.put(label, data);
     }

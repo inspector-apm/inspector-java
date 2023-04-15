@@ -24,7 +24,7 @@ public class Inspector {
             throw new Error("No active transaction found");
         }
 
-        Segment segment = new Segment(this.transaction.getBasicTransactionInfo(),type, "Test label 1");
+        Segment segment = new Segment(this.transaction.getBasicTransactionInfo(),type, label);
         segment.start();
 
         this.addEntries(segment);
@@ -56,7 +56,6 @@ public class Inspector {
     }
 
     public void flush(){
-
         if(!this.conf.isEnabled() || !this.isRecording()) return;
 
         if(!this.transaction.isEnded()){
@@ -76,20 +75,21 @@ public class Inspector {
             return fn.execute(segment);
         } catch (Exception e) {
             reportException(e);
-            return segment;
+            if(throwE){
+                throw e;
+            }
         } finally {
             segment.end();
+            return segment;
         }
     }
 
     private void reportException(Throwable e) {
-        System.out.println("Reportexception triggered");
-        Segment segment = startSegment("exception", e.getMessage());
+        Segment segment = startSegment("exception", e.toString());
 
         IError error = new IError(e, transaction.getBasicTransactionInfo());
         addEntries(error);
         segment.end();
-
     }
 
 }

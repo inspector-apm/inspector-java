@@ -2,7 +2,6 @@ package dev.inspector.agent.model;
 
 import dev.inspector.agent.utility.AsyncHttpPost;
 import org.json.JSONArray;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,7 +18,6 @@ public class Transport {
     }
 
     public void flush(){
-
         if(this.queue.size() == 0) return;
 
         JSONArray items = new JSONArray();
@@ -27,7 +25,6 @@ public class Transport {
             items.put(item.toTransport())
         );
 
-        System.out.println(items.toString());
         this.send(items);
     }
 
@@ -40,10 +37,7 @@ public class Transport {
         ExecutorService executor = Executors.newFixedThreadPool(10);
 
         String jsonPayload = items.toString();
-
-        CompletableFuture<String> response = httpHandler.asyncHttpPost(this.conf.getUrl(), jsonPayload, executor, this.conf.getIngestionKey(), this.conf.getVersion());
-
-        response.thenAccept(System.out::println);
+        httpHandler.asyncHttpPost(this.conf.getUrl(), jsonPayload, executor, this.conf.getIngestionKey(), this.conf.getVersion());
         executor.shutdown();
     }
 

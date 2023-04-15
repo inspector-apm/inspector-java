@@ -27,17 +27,20 @@ public class IError  implements  Transportable{
 
     @Override
     public JSONObject toTransport() {
+        StackTraceElement[] stackTrace = error.getStackTrace();
+        StackTraceElement trace = stackTrace[0];
 
-        //TODO: File + line => stacktrace[0]
+        Integer line = trace.getLineNumber();
+        String fileName = trace.getFileName();
 
         return new JsonBuilder()
                 .put("model", "error")
                 .put("timestamp", timestamp)
-                .put("message", error.getMessage())
+                .put("message", error.toString())
                 .put("class", error.getClass())
-                .put("file", "file_test")
-                .put("line", 12)
-                .put("handled", false)
+                .put("file", fileName)
+                .put("line", line)
+                .put("handled", this.handled)
                 .put("stack", stackTraceToJson())
                 .put("transaction", transaction.toObject())
                 .build();

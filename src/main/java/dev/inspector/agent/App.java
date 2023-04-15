@@ -16,18 +16,19 @@ public class App {
         Segment segmentRef = inspector.addSegment((segment) -> {
             waitMillis(1000);
             String ptr = null;
+            if(ptr.equals("excetion")) System.out.println(1234);
             return segment;
         }, "test async", "test label", false);
         segmentRef.addContext("view1", new JsonBuilder().put("test", "test2").build());
 
-        /*
+
         waitMillis(3000);
 
         Segment segmentRef2 = inspector.addSegment((segment) -> {
             waitMillis(2000);
             return segment;
         }, "test async2", "test label2", false);
-        */
+
 
         // See the node env
         inspector.flush();
