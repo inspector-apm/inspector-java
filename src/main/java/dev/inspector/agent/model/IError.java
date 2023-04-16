@@ -3,16 +3,14 @@ package dev.inspector.agent.model;
 import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.Date;
 
-public class IError  implements  Transportable{
+public class IError extends Context implements Transportable{
 
     private long timestamp =  Math.round(new Date().getTime() / 1000.0);
     private TransactionIdentifier transaction;
     private Throwable error;
     private boolean handled;
-
 
     public IError(Throwable error, TransactionIdentifier transaction){
         this.error = error;
@@ -23,7 +21,6 @@ public class IError  implements  Transportable{
         this.handled = handled;
         return this;
     }
-
 
     @Override
     public JSONObject toTransport() {
@@ -41,6 +38,7 @@ public class IError  implements  Transportable{
                 .put("file", fileName)
                 .put("line", line)
                 .put("handled", this.handled)
+                .put("context", super.context)
                 .put("stack", stackTraceToJson())
                 .put("transaction", transaction.toObject())
                 .build();

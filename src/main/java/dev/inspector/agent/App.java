@@ -12,6 +12,8 @@ public class App {
         Transaction transaction = inspector.startTransaction("Test Java segment 1");
         transaction.setResult("SUCCESS");
 
+        transaction.addContext("Context1",  new JsonBuilder().put("test_transaction", "test2").build());
+
 
         Segment segmentRef = inspector.addSegment((segment) -> {
             waitMillis(1000);
