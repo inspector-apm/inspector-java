@@ -34,12 +34,9 @@ public class Transaction extends Context implements Transportable {
     }
 
     public void start(){
-        this.start(new Date().getTime());
+        this.timestamp = new Date().getTime();
     }
 
-    public void start(long date){
-        this.timestamp = date;
-    }
 
     public void end(){
         this.end(new Date().getTime() - this.timestamp);

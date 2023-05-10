@@ -10,16 +10,16 @@ public class App {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> onShutdown()));
         Config config = new Config("81e6d4df93e1bfad8e9f3c062022e3a0d8a77dce");
         Inspector inspector = new Inspector(config);
-        Transaction transaction = inspector.startTransaction("Test Java segment 1");
+        Transaction transaction = inspector.startTransaction("Transaction 1");
         transaction.setResult("SUCCESS");
 
-        transaction.addContext("Context1",  new JsonBuilder().put("test_transaction", "test2").build());
+        transaction.addContext("Context1",  new JsonBuilder().put("contextkey", "contextvalue").build());
 
 
         Segment segmentRef = inspector.addSegment((segment) -> {
             waitMillis(1000);
             String ptr = null;
-            if(ptr.equals("excetion")) System.out.println(1234);
+            if(ptr.equals("exception")) System.out.println(1234);
             return segment;
         }, "test async", "test label", false);
         segmentRef.addContext("view1", new JsonBuilder().put("test", "test2").build());

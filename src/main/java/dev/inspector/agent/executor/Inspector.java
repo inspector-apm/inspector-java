@@ -15,7 +15,7 @@ public class Inspector {
 
     public Inspector(Config conf){
         this.conf = conf;
-        this.transport = new Transport(conf);
+        transport = new Transport(conf);
     }
 
     public Transaction startTransaction(String name){
@@ -26,7 +26,7 @@ public class Inspector {
     }
 
     public Segment startSegment(String type, String label){
-        if(!this.isRecording()){
+        if(!isRecording()){
             throw new Error("No active transaction found");
         }
         Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
@@ -41,7 +41,7 @@ public class Inspector {
 
 
     public void addEntries(Transportable data){
-        if(transport.getQueueSize() < this.conf.getMaxEntries()){
+        if(transport.getQueueSize() < conf.getMaxEntries()){
             transport.addEntry(data);
         }
     }
@@ -49,13 +49,13 @@ public class Inspector {
 
 
     public void flush(){
-        if(!this.conf.isEnabled() || !this.isRecording()) return;
+        if(!conf.isEnabled() || !isRecording()) return;
 
-        if(!this.transaction.isEnded()){
-            this.transaction.end();
+        if(!transaction.isEnded()){
+            transaction.end();
         }
-        this.transport.flush();
-        this.transaction = null;
+        transport.flush();
+        transaction = null;
     }
 
 

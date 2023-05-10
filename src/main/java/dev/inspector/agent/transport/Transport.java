@@ -30,7 +30,7 @@ public class Transport {
                 items.put(item.toTransport())
         );
 
-        System.out.println(items.toString());
+        System.out.println(items);
         this.send(items);
     }
 
