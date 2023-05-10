@@ -27,7 +27,7 @@ public class Transport {
 
         JSONArray items = new JSONArray();
         this.queue.forEach(item->
-            items.put(item.toTransport())
+                items.put(item.toTransport())
         );
 
         System.out.println(items.toString());

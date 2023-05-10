@@ -8,21 +8,18 @@ import java.net.UnknownHostException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.util.Date;
-import java.util.HashMap;
 
-public class Transaction implements Transportable {
+public class Transaction extends Context implements Transportable {
     private String model = "transaction";
     private String type = "request";
     private String name;
     private String hash = System.currentTimeMillis() + "" + (int) (Math.random() * 100);
-    private String http; // TBD Object
     private User user;
     private String result = "";
     private long timestamp;
     private Long duration;
     private double memoryPeak;
 
-    private HashMap<String , JSONObject> context = new HashMap();
 
 
     public Transaction(String name) {
@@ -58,10 +55,6 @@ public class Transaction implements Transportable {
         return heapMemoryUsage.getUsed();
     }
 
-    public void addContext(String label, JSONObject data){
-        this.context.put(label, data);
-    }
-
     public boolean isEnded(){
         return this.duration != null && this.duration > 0;
     }
@@ -92,11 +85,10 @@ public class Transaction implements Transportable {
             .put("result", this.result)
             .put("memory_peak", this.memoryPeak)
             .put("user", this.user)
-            .put("http", this.http)
             .put("host", new JsonBuilder()
                     .put("hostname",hostname)
                     .build())
-            .put("context", this.context)
+            .put("context", super.context)
             .build();
 
     }

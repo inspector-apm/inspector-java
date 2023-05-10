@@ -13,15 +13,17 @@ public class App {
         Transaction transaction = inspector.startTransaction("Test Java segment 1");
         transaction.setResult("SUCCESS");
 
-        waitMillis(1000);
+        transaction.addContext("Context1",  new JsonBuilder().put("test_transaction", "test2").build());
+
 
         Segment segmentRef = inspector.addSegment((segment) -> {
-            waitMillis(2000);
+            waitMillis(1000);
             String ptr = null;
-            boolean x = ptr.equals("gfg");
+            if(ptr.equals("excetion")) System.out.println(1234);
             return segment;
         }, "test async", "test label", false);
         segmentRef.addContext("view1", new JsonBuilder().put("test", "test2").build());
+
 
         waitMillis(3000);
 

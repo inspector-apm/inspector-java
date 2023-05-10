@@ -40,8 +40,6 @@ public class AsyncHttpPost {
                     while ((responseLine = br.readLine()) != null) {
                         response.append(responseLine.trim());
                     }
-                    System.out.println(connection.toString());
-
                     return response.toString();
                 }
             } catch (IOException e) {

@@ -49,7 +49,6 @@ public class Inspector {
 
 
     public void flush(){
-
         if(!this.conf.isEnabled() || !this.isRecording()) return;
 
         if(!this.transaction.isEnded()){
@@ -67,22 +66,21 @@ public class Inspector {
             return fn.execute(segment);
         } catch (Exception e) {
             reportException(e);
-            return segment;
+            if(throwE){
+                throw e;
+            }
         } finally {
             segment.end();
+            return segment;
         }
     }
 
     private void reportException(Throwable e) {
-        System.out.println("Reportexception triggered");
-        Segment segment = startSegment("exception", e.getMessage());
+        Segment segment = startSegment("exception", e.toString());
 
         IError error = new IError(e, transaction.getBasicTransactionInfo());
-        //TODO: Populate
-
         addEntries(error);
         segment.end();
-
     }
 
 }
