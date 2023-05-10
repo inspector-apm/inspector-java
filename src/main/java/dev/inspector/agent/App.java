@@ -1,5 +1,6 @@
 package dev.inspector.agent;
 
+import dev.inspector.agent.executor.Inspector;
 import dev.inspector.agent.model.*;
 import dev.inspector.agent.utility.JsonBuilder;
 import java.util.Date;

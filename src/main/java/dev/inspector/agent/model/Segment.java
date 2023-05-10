@@ -1,5 +1,6 @@
 package dev.inspector.agent.model;
 
+import dev.inspector.agent.transport.Transportable;
 import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONObject;
 
@@ -29,10 +30,7 @@ public class Segment implements Transportable {
     }
 
     public void start(){
-        this.start(new Date().getTime());
-    }
-
-    public void start(long time){
+        long time = new Date().getTime();
         this.start = time - this.transaction.getTimestamp();
         this.timestamp = time;
     }

@@ -1,7 +1,10 @@
-package dev.inspector.agent.model;
+package dev.inspector.agent.transport;
 
+import dev.inspector.agent.model.Config;
 import dev.inspector.agent.utility.AsyncHttpPost;
 import org.json.JSONArray;
+
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,11 +14,11 @@ import java.util.ArrayList;
 public class Transport {
 
     private Config conf;
-    private ArrayList<Transportable> queue;
+    private List<Transportable> queue;
 
     public Transport(Config conf){
         this.conf = conf;
-        this.queue = new ArrayList<Transportable>();
+        this.queue = new ArrayList<>();
     }
 
     public void flush(){

@@ -1,12 +1,14 @@
-package dev.inspector.agent.model;
+package dev.inspector.agent.error;
 
+import dev.inspector.agent.model.TransactionIdentifier;
+import dev.inspector.agent.transport.Transportable;
 import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Date;
 
-public class IError  implements  Transportable{
+public class IError  implements Transportable {
 
     private long timestamp = new Date().getTime();
     private TransactionIdentifier transaction;

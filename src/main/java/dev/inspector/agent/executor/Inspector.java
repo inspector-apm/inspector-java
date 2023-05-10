@@ -1,5 +1,12 @@
-package dev.inspector.agent.model;
+package dev.inspector.agent.executor;
+import dev.inspector.agent.error.IError;
+import dev.inspector.agent.model.*;
+import dev.inspector.agent.transport.Transport;
+import dev.inspector.agent.transport.Transportable;
+
 import java.util.ArrayList;
+import java.util.List;
+
 public class Inspector {
 
     private Config conf;
@@ -12,48 +19,34 @@ public class Inspector {
     }
 
     public Transaction startTransaction(String name){
-        this.transaction = new Transaction(name);
-        this.transaction.start();
-
-        this.addEntries(this.transaction);
-        return this.transaction;
+        transaction = new Transaction(name);
+        transaction.start();
+        addEntries(transaction);
+        return transaction;
     }
 
     public Segment startSegment(String type, String label){
         if(!this.isRecording()){
             throw new Error("No active transaction found");
         }
-
-        Segment segment = new Segment(this.transaction.getBasicTransactionInfo(),type, label);
+        Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
         segment.start();
-
-        this.addEntries(segment);
-
+        addEntries(segment);
         return segment;
     }
 
-    public Transaction transaction(){
-        return this.transaction;
-    }
-
     public boolean isRecording(){
-        return this.transaction != null;
+        return transaction != null;
     }
 
 
     public void addEntries(Transportable data){
-        ArrayList<Transportable> dataArray = new ArrayList<Transportable>();
-        dataArray.add(data);
-        this.addEntries(dataArray);
+        if(transport.getQueueSize() < this.conf.getMaxEntries()){
+            transport.addEntry(data);
+        }
     }
 
-    public void addEntries(ArrayList<Transportable> data){
-        data.forEach(entry -> {
-            if(this.canAddEntry()){
-                this.transport.addEntry(entry);
-            }
-        });
-    }
+
 
     public void flush(){
 
@@ -66,9 +59,7 @@ public class Inspector {
         this.transaction = null;
     }
 
-    private boolean canAddEntry(){
-        return this.transport.getQueueSize() < this.conf.getMaxEntries();
-    }
+
 
     public Segment addSegment(ElaborateSegment fn, String type, String label, boolean throwE) {
         Segment segment = startSegment(type, label);
