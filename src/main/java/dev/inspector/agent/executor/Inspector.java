@@ -20,7 +20,6 @@ public class Inspector {
 
     public Transaction startTransaction(String name){
         transaction = new Transaction(name);
-        transaction.start();
         addEntries(transaction);
         return transaction;
     }
@@ -30,8 +29,7 @@ public class Inspector {
             throw new Error("No active transaction found");
         }
         Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
-        segment.start();
-        addEntries(segment);
+
         return segment;
     }
 
@@ -40,10 +38,11 @@ public class Inspector {
     }
 
 
-    public void addEntries(Transportable data){
-        if(transport.getQueueSize() < conf.getMaxEntries()){
-            transport.addEntry(data);
+    public void addEntries(Transportable data) {
+        while(transport.getQueueSize() >= conf.getMaxEntries()){
+            transport.flush();
         }
+        transport.addEntry(data);
     }
 
 
@@ -71,6 +70,7 @@ public class Inspector {
             }
         } finally {
             segment.end();
+            addEntries(segment);
             return segment;
         }
     }

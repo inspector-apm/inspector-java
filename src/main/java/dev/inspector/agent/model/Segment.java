@@ -16,28 +16,19 @@ public class Segment extends Context implements Transportable {
     private long timestamp;
     private long duration;
 
-    public Segment(TransactionIdentifier identifier)  {
-        this(identifier, "process", null);
-    }
 
     public Segment(TransactionIdentifier identifier, String type, String label){
         this.transaction = identifier;
         this.type = type;
         this.label = label;
+        this.timestamp = new Date().getTime();
+        this.start = timestamp - this.transaction.getTimestamp();
     }
 
-    public void start(){
-        long time = new Date().getTime();
-        this.start = time - this.transaction.getTimestamp();
-        this.timestamp = time;
-    }
+
 
     public void end(){
-        this.end(new Date().getTime() - this.timestamp);
-    }
-
-    public void end(long duration){
-        this.duration = duration;
+        this.duration = new Date().getTime() - this.timestamp;
     }
 
 

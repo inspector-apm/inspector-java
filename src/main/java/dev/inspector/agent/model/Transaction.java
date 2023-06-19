@@ -24,6 +24,7 @@ public class Transaction extends Context implements Transportable {
 
     public Transaction(String name) {
         this.name = name;
+        this.timestamp = new Date().getTime();
     }
     public void withUser(User user){
         this.user = user;
@@ -33,9 +34,7 @@ public class Transaction extends Context implements Transportable {
         this.result = result;
     }
 
-    public void start(){
-        this.timestamp = new Date().getTime();
-    }
+
 
 
     public void end(){

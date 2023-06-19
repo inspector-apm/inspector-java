@@ -3,11 +3,15 @@ package dev.inspector.agent;
 import dev.inspector.agent.executor.Inspector;
 import dev.inspector.agent.model.*;
 import dev.inspector.agent.utility.JsonBuilder;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> onShutdown()));
+
         Config config = new Config("81e6d4df93e1bfad8e9f3c062022e3a0d8a77dce");
         Inspector inspector = new Inspector(config);
         Transaction transaction = inspector.startTransaction("Transaction 1");
@@ -31,6 +35,7 @@ public class App {
             waitMillis(2000);
             return segment;
         }, "test async2", "test label2", false);
+        segmentRef2.addContext("view2", new JsonBuilder().put("tes3", "test4").build());
 
 
         // See the node env

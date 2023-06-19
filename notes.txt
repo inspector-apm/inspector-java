@@ -1,0 +1,46 @@
+key id 4E9D8E705AFD769122E004505EBAA65BEB60E9DC
+key email support@inspector.dev
+
+some other notes about gpg generation
+ C:\Users\aprez\Desktop\Alex\IT\Workspace\Personali\inspector> ubuntu
+Windows Subsystem for Linux is now available in the Microsoft Store!
+You can upgrade by running 'wsl.exe --update' or by visiting https://aka.ms/wslstorepage
+Installing WSL from the Microsoft Store will give you the latest WSL updates, faster.
+For more information please visit https://aka.ms/wslstoreinfo
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+gpg: directory '/home/user/.gnupg' created
+gpg: keybox '/home/user/.gnupg/pubring.kbx' created
+Note: Use "gpg --full-generate-key" for a full featured key generation dialog.
+
+GnuPG needs to construct a user ID to identify your key.
+
+Real name: Valerio Barbera
+Email address: support@inspector.dev
+You selected this USER-ID:
+    "Valerio Barbera <support@inspector.dev>"
+
+Change (N)ame, (E)mail, or (O)kay/(Q)uit? O
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+gpg: /home/user/.gnupg/trustdb.gpg: trustdb created
+gpg: key 5EBAA65BEB60E9DC marked as ultimately trusted
+gpg: directory '/home/user/.gnupg/openpgp-revocs.d' created
+gpg: revocation certificate stored as '/home/user/.gnupg/openpgp-revocs.d/4E9D8E705AFD769122E004505EBAA65BEB60E9DC.rev'
+public and secret key created and signed.
+
+pub   rsa3072 2023-05-11 [SC] [expires: 2025-05-10]
+      4E9D8E705AFD769122E004505EBAA65BEB60E9DC
+uid                      Valerio Barbera <support@inspector.dev>
+sub   rsa3072 2023-05-11 [E] [expires: 2025-05-10]
+
+user@MSI:/mnt/c/users/aprez/Desktop/alex/it/workspace/Personali/inspector$ gpg --keyserver hkp://pool.sks-keyservers.net --send-keys support@inspector.dev
+gpg: "support@inspector.dev" not a key ID: skipping
+user@MSI:/mnt/c/users/aprez/Desktop/alex/it/workspace/Personali/inspector$

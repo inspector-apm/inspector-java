@@ -30,11 +30,10 @@ public class Transport {
                 items.put(item.toTransport())
         );
 
-        System.out.println(items);
-        this.send(items);
+        send(items);
     }
 
-    public void addEntry(Transportable item){
+    public void addEntry(Transportable item) {
         this.queue.add(item);
     }
 
