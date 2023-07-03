@@ -31,6 +31,7 @@ public class Transport {
         );
 
         send(items);
+
     }
 
     public void addEntry(Transportable item) {
@@ -45,9 +46,21 @@ public class Transport {
 
         CompletableFuture<String> response = httpHandler.asyncHttpPost(this.conf.getUrl(), jsonPayload, executor, this.conf.getIngestionKey(), this.conf.getVersion());
 
-        response.thenAccept(System.out::println);
+        response.thenAccept(res -> {
+            System.out.println(res);
+            // Remove items from the queue after successful sending
+            this.queue.clear();
+        });
+
+        // Handle any exceptions that may occur during the execution
+        response.exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
+        });
+
         executor.shutdown();
     }
+
 
     public int getQueueSize(){
         return this.queue.size();
