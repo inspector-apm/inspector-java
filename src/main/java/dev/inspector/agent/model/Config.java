@@ -2,6 +2,7 @@ package dev.inspector.agent.model;
 
 public class Config {
 
+    private Long timeToFlush;
     private String ingestionKey;
     private String url = "https://ingest.inspector.dev";
     private boolean enabled = true;
@@ -10,8 +11,9 @@ public class Config {
     private int maxEntries = 100;
     private String version = "1.9.10";
 
-    public Config(String ingestionKey){
+    public Config(String ingestionKey, String timeToFlush){
         this.ingestionKey = ingestionKey;
+        this.timeToFlush = Long.valueOf(timeToFlush);
     }
 
 
@@ -67,5 +69,13 @@ public class Config {
     public Config setVersion(String version) {
         this.version = version;
         return this;
+    }
+
+    public Long getTimeToFlush() {
+        return timeToFlush;
+    }
+
+    public void setTimeToFlush(Long timeToFlush) {
+        this.timeToFlush = timeToFlush;
     }
 }

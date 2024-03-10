@@ -12,7 +12,7 @@ public class App {
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> onShutdown()));
 
-        Config config = new Config("69597a87ae16c25741ab1623c1b6be2e6b113ac8");
+        Config config = new Config("69597a87ae16c25741ab1623c1b6be2e6b113ac8", "10000");
         Inspector inspector = new Inspector(config);
         Transaction transaction = inspector.startTransaction("Transaction 2");
         transaction.setResult("SUCCESS");

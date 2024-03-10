@@ -6,16 +6,22 @@ import dev.inspector.agent.transport.Transportable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Inspector {
 
     private Config conf;
     private Transport transport;
     private Transaction transaction;
+    private ScheduledExecutorService scheduler;
 
     public Inspector(Config conf){
         this.conf = conf;
         transport = new Transport(conf);
+        this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        this.scheduler.scheduleAtFixedRate(this::flush, conf.getTimeToFlush(), conf.getTimeToFlush(), TimeUnit.MILLISECONDS);
     }
 
     public Transaction startTransaction(String name){
@@ -81,6 +87,20 @@ public class Inspector {
         IError error = new IError(e, transaction.getBasicTransactionInfo());
         addEntries(error);
         segment.end();
+    }
+
+    public void shutdown() {
+        flush();
+        if (scheduler != null) {
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+            }
+        }
     }
 
 }
