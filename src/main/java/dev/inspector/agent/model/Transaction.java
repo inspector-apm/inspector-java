@@ -48,7 +48,7 @@ public class Transaction extends Context implements Transportable {
 
     public static double getMemoryPeak() {
         MemoryUsage heapMemoryUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-        return heapMemoryUsage.getUsed();
+        return heapMemoryUsage.getUsed() /1000000;
     }
 
     public boolean isEnded(){
