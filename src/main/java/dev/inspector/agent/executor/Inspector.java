@@ -3,6 +3,7 @@ import dev.inspector.agent.error.IError;
 import dev.inspector.agent.model.*;
 import dev.inspector.agent.transport.Transport;
 import dev.inspector.agent.transport.Transportable;
+import dev.inspector.agent.utility.JsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,12 @@ public class Inspector {
         IError error = new IError(e, transaction.getBasicTransactionInfo());
         addEntries(error);
         segment.end();
+    }
+
+    public void closeTransaction(String contextLabel) {
+        this.transaction.setResult("SUCCESS");
+        this.transaction.addContext(contextLabel, (new JsonBuilder()).put("contextkey", "contextvalue").build());
+        this.transaction.end();
     }
 
     public void shutdown() {
