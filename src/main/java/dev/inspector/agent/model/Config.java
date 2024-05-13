@@ -2,80 +2,69 @@ package dev.inspector.agent.model;
 
 public class Config {
 
-    private Long timeToFlush;
     private String ingestionKey;
-    private String url = "https://ingest.inspector.dev";
-    private boolean enabled = true;
-    private boolean autoWiring = true;
+    private String url;
+    private Boolean enabled = true;
 
-    private int maxEntries = 100;
+    private Integer maxEntries = 100;
     private String version = "1.9.10";
 
-    public Config(String ingestionKey, String timeToFlush){
+    public Config(String ingestionKey, String url, String enabled, String version, String maxEntries){
         this.ingestionKey = ingestionKey;
-        this.timeToFlush = Long.valueOf(timeToFlush);
+        this.url = url;
+        this.enabled = Boolean.valueOf(enabled);
+        this.version = version;
+        this.maxEntries = Integer.valueOf(maxEntries);
     }
 
-
-    public String getIngestionKey() {
-        return ingestionKey;
-    }
 
     public Config setIngestionKey(String ingestionKey) {
         this.ingestionKey = ingestionKey;
         return this;
     }
 
-    public String getUrl() {
-        return url;
-    }
 
     public Config setUrl(String url) {
         this.url = url;
         return this;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
 
     public Config setEnabled(boolean enabled) {
         this.enabled = enabled;
         return this;
     }
 
-    public boolean isAutoWiring() {
-        return autoWiring;
-    }
 
-    public Config setAutoWiring(boolean autoWiring) {
-        this.autoWiring = autoWiring;
-        return this;
-    }
-
-    public int getMaxEntries() {
-        return maxEntries;
-    }
 
     public Config setMaxEntries(int maxEntries) {
         this.maxEntries = maxEntries;
         return this;
     }
 
-    public String getVersion() {
-        return version;
-    }
 
     public Config setVersion(String version) {
         this.version = version;
         return this;
     }
 
-    public Long getTimeToFlush() {
-        return timeToFlush;
+    public String getIngestionKey() {
+        return ingestionKey;
     }
 
-    public void setTimeToFlush(Long timeToFlush) {
-        this.timeToFlush = timeToFlush;
+    public String getUrl() {
+        return url;
+    }
+
+    public Boolean isEnabled() {
+        return enabled;
+    }
+
+    public Integer getMaxEntries() {
+        return maxEntries;
+    }
+
+    public String getVersion() {
+        return version;
     }
 }

@@ -22,7 +22,6 @@ public class Inspector {
         this.conf = conf;
         transport = new Transport(conf);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
-        this.scheduler.scheduleAtFixedRate(this::flush, conf.getTimeToFlush(), conf.getTimeToFlush(), TimeUnit.MILLISECONDS);
     }
 
     public Transaction startTransaction(String name){
