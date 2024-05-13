@@ -9,12 +9,8 @@ public class Config {
     private Integer maxEntries = 100;
     private String version = "1.9.10";
 
-    public Config(String ingestionKey, String url, String enabled, String version, String maxEntries){
+    public Config(String ingestionKey){
         this.ingestionKey = ingestionKey;
-        this.url = url;
-        this.enabled = Boolean.valueOf(enabled);
-        this.version = version;
-        this.maxEntries = Integer.valueOf(maxEntries);
     }
 
 
