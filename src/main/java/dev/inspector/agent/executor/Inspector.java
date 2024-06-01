@@ -1,12 +1,11 @@
 package dev.inspector.agent.executor;
 import dev.inspector.agent.error.IError;
 import dev.inspector.agent.model.*;
+import dev.inspector.agent.transport.AsyncTransport;
+import dev.inspector.agent.model.Transportable;
 import dev.inspector.agent.transport.Transport;
-import dev.inspector.agent.transport.Transportable;
 import dev.inspector.agent.utility.JsonBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,13 +13,13 @@ import java.util.concurrent.TimeUnit;
 public class Inspector {
 
     private Config conf;
-    private Transport transport;
+    private Transport asyncTransport;
     private Transaction transaction;
     private ScheduledExecutorService scheduler;
 
     public Inspector(Config conf){
         this.conf = conf;
-        transport = new Transport(conf);
+        asyncTransport = new AsyncTransport(conf);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -45,10 +44,10 @@ public class Inspector {
 
 
     public void addEntries(Transportable data) {
-        while(transport.getQueueSize() >= conf.getMaxEntries()){
-            transport.flush();
+        while(asyncTransport.getQueueSize() >= conf.getMaxEntries()){
+            asyncTransport.flush();
         }
-        transport.addEntry(data);
+        asyncTransport.addEntry(data);
     }
 
 
@@ -59,7 +58,7 @@ public class Inspector {
         if(!transaction.isEnded()){
             transaction.end();
         }
-        transport.flush();
+        asyncTransport.flush();
         transaction = null;
     }
 
@@ -87,12 +86,6 @@ public class Inspector {
         IError error = new IError(e, transaction.getBasicTransactionInfo());
         addEntries(error);
         segment.end();
-    }
-
-    public void closeTransaction(String contextLabel) {
-        this.transaction.setResult("SUCCESS");
-        this.transaction.addContext(contextLabel, (new JsonBuilder()).put("contextkey", "contextvalue").build());
-        this.transaction.end();
     }
 
     public void shutdown() {

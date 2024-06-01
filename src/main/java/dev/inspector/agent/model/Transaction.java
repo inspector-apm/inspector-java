@@ -1,6 +1,5 @@
 package dev.inspector.agent.model;
 
-import dev.inspector.agent.transport.Transportable;
 import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONObject;
 import java.net.InetAddress;

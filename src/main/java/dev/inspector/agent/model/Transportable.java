@@ -1,4 +1,4 @@
-package dev.inspector.agent.transport;
+package dev.inspector.agent.model;
 
 import org.json.JSONObject;
 
