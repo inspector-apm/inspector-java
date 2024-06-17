@@ -4,7 +4,6 @@ import dev.inspector.agent.model.*;
 import dev.inspector.agent.transport.AsyncTransport;
 import dev.inspector.agent.model.Transportable;
 import dev.inspector.agent.transport.Transport;
-import dev.inspector.agent.utility.JsonBuilder;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,13 +12,13 @@ import java.util.concurrent.TimeUnit;
 public class Inspector {
 
     private Config conf;
-    private Transport asyncTransport;
+    private Transport transport;
     private Transaction transaction;
     private ScheduledExecutorService scheduler;
 
     public Inspector(Config conf){
         this.conf = conf;
-        asyncTransport = new AsyncTransport(conf);
+        transport = new AsyncTransport(conf);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -44,10 +43,10 @@ public class Inspector {
 
 
     public void addEntries(Transportable data) {
-        while(asyncTransport.getQueueSize() >= conf.getMaxEntries()){
-            asyncTransport.flush();
+        while(transport.getQueueSize() >= conf.getMaxEntries()){
+            transport.flush();
         }
-        asyncTransport.addEntry(data);
+        transport.addEntry(data);
     }
 
 
@@ -58,7 +57,7 @@ public class Inspector {
         if(!transaction.isEnded()){
             transaction.end();
         }
-        asyncTransport.flush();
+        transport.flush();
         transaction = null;
     }
 
