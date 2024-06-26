@@ -1,5 +1,5 @@
 package dev.inspector.agent.executor;
-import dev.inspector.agent.error.IError;
+import dev.inspector.agent.model.Error;
 import dev.inspector.agent.model.*;
 import dev.inspector.agent.transport.AsyncTransport;
 import dev.inspector.agent.model.Transportable;
@@ -30,7 +30,7 @@ public class Inspector {
 
     public Segment startSegment(String type, String label){
         if(!isRecording()){
-            throw new Error("No active transaction found");
+            throw new java.lang.Error("No active transaction found");
         }
         Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
 
@@ -82,7 +82,7 @@ public class Inspector {
     private void reportException(Throwable e) {
         Segment segment = startSegment("exception", e.toString());
 
-        IError error = new IError(e, transaction.getBasicTransactionInfo());
+        Error error = new Error(e, transaction.getBasicTransactionInfo());
         addEntries(error);
         segment.end();
     }

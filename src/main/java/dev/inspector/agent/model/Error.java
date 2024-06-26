@@ -1,14 +1,12 @@
-package dev.inspector.agent.error;
+package dev.inspector.agent.model;
 
-import dev.inspector.agent.model.TransactionIdentifier;
-import dev.inspector.agent.model.Transportable;
 import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Date;
 
-public class IError  implements Transportable {
+public class Error extends Context implements Transportable  {
 
     private long timestamp = new Date().getTime();
     private TransactionIdentifier transaction;
@@ -16,12 +14,12 @@ public class IError  implements Transportable {
     private boolean handled;
 
 
-    public IError(Throwable error, TransactionIdentifier transaction){
+    public Error(Throwable error, TransactionIdentifier transaction){
         this.error = error;
         this.transaction = transaction;
     }
 
-    public IError setHandled(boolean handled){
+    public Error setHandled(boolean handled){
         this.handled = handled;
         return this;
     }
