@@ -4,7 +4,7 @@
 
   <groupId>dev.inspector</groupId>
   <artifactId>agent</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.5</version>
 
   <name>agent</name>
 
@@ -191,9 +191,9 @@
               <execution>
                 <id>sign-artifacts</id>
                 <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
+<!--                <goals>-->
+<!--                  <goal>sign</goal>-->
+<!--                </goals>-->
               </execution>
             </executions>
           </plugin>

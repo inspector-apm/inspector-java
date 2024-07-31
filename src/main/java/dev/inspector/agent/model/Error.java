@@ -34,7 +34,7 @@ public class Error extends Context implements Transportable  {
                 .put("model", "error")
                 .put("timestamp", timestamp)
                 .put("message", error.getMessage())
-                .put("class", error.getClass())
+                .put("class", error.getClass().getSimpleName())
                 .put("file", "file_test")
                 .put("line", 12)
                 .put("handled", false)

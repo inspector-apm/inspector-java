@@ -25,13 +25,17 @@ public class AsyncTransport implements Transport {
     public void flush(){
 
         if(this.queue.size() == 0) return;
+        try {
+            JSONArray items = new JSONArray();
+            this.queue.forEach(item->
+                    items.put(item.toTransport())
+            );
 
-        JSONArray items = new JSONArray();
-        this.queue.forEach(item->
-                items.put(item.toTransport())
-        );
-
-        send(items);
+            send(items);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
 
     }
 

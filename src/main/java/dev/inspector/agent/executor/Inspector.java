@@ -33,7 +33,7 @@ public class Inspector {
             throw new java.lang.Error("No active transaction found");
         }
         Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
-
+        addEntries(segment);
         return segment;
     }
 
@@ -66,6 +66,7 @@ public class Inspector {
     public Segment addSegment(ElaborateSegment fn, String type, String label, boolean throwE) {
         Segment segment = startSegment(type, label);
         try {
+            //TODO: anonymous function da implementare e cancellare ElaborateSegment
             return fn.execute(segment);
         } catch (Exception e) {
             reportException(e);
@@ -79,12 +80,23 @@ public class Inspector {
         }
     }
 
-    private void reportException(Throwable e) {
-        Segment segment = startSegment("exception", e.toString());
+    public void reportException(Throwable e) {
+        if(!hasTransaction()) {
+            startTransaction(e.getClass().getSimpleName());
+        }
+        Segment segment = startSegment("exception", e.getMessage());
 
         Error error = new Error(e, transaction.getBasicTransactionInfo());
         addEntries(error);
         segment.end();
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public Boolean hasTransaction() {
+       return (null != this.transaction);
     }
 
     public void shutdown() {
