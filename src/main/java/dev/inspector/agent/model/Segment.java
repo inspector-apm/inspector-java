@@ -20,7 +20,7 @@ public class Segment extends Context implements Transportable {
         this.transaction = identifier;
         this.type = type;
         this.label = label;
-        this.timestamp = new Date().getTime();
+        this.timestamp = Math.round(new Date().getTime() / 1000.0);
         this.start = timestamp - this.transaction.getTimestamp();
     }
 

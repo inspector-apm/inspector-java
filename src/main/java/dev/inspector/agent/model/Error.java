@@ -8,13 +8,14 @@ import java.util.Date;
 
 public class Error extends Context implements Transportable  {
 
-    private long timestamp = new Date().getTime();
+    private long timestamp;
     private TransactionIdentifier transaction;
     private Throwable error;
     private boolean handled;
 
 
     public Error(Throwable error, TransactionIdentifier transaction){
+        this.timestamp = Math.round(new Date().getTime() / 1000.0);
         this.error = error;
         this.transaction = transaction;
     }
