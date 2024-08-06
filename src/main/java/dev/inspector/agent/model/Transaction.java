@@ -23,7 +23,7 @@ public class Transaction extends Context implements Transportable {
 
     public Transaction(String name) {
         this.name = name;
-        this.timestamp = new Date().getTime();
+        this.timestamp = Math.round(new Date().getTime() / 1000.0);
     }
     public void withUser(User user){
         this.user = user;
@@ -37,7 +37,7 @@ public class Transaction extends Context implements Transportable {
 
 
     public void end(){
-        this.end(new Date().getTime() - this.timestamp);
+        this.end((new Date().getTime() / 1000) - this.timestamp);
     }
 
     public void end(long duration){
@@ -74,8 +74,8 @@ public class Transaction extends Context implements Transportable {
             .put("hash", this.hash)
             .put("name", this.name)
             .put("type", this.type)
-            .put("timestamp", Math.round(this.timestamp / 1000.0))
-            .put("end",  Math.round((this.timestamp + this.duration) / 1000.0))
+            .put("timestamp", this.timestamp)
+            .put("end",  this.timestamp + this.duration)
             .put("duration", this.duration)
             .put("result", this.result)
             .put("memory_peak", this.memoryPeak)

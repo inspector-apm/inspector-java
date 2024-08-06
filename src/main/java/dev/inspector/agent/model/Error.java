@@ -33,7 +33,7 @@ public class Error extends Context implements Transportable  {
 
         return new JsonBuilder()
                 .put("model", "error")
-                .put("timestamp", timestamp)
+                .put("timestamp", this.timestamp)
                 .put("message", error.getMessage())
                 .put("class", error.getClass().getSimpleName())
                 .put("file", "file_test")

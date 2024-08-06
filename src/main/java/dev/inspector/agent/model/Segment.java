@@ -37,7 +37,7 @@ public class Segment extends Context implements Transportable {
             .put("model", this.model)
             .put("type", this.type)
             .put("label", this.label)
-            .put("timestamp", Math.round(this.timestamp / 1000.0))
+            .put("timestamp", this.timestamp)
             .put("start",this.start)
             .put("duration", this.duration)
             .put("context", super.context)
