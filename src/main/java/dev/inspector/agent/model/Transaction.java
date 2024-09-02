@@ -1,11 +1,15 @@
 package dev.inspector.agent.model;
 
 import dev.inspector.agent.utility.JsonBuilder;
+import dev.inspector.agent.utility.TimesUtils;
 import org.json.JSONObject;
+
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
+import java.time.Instant;
 import java.util.Date;
 
 public class Transaction extends Context implements Transportable {
@@ -15,15 +19,15 @@ public class Transaction extends Context implements Transportable {
     private String hash = System.currentTimeMillis() + "" + (int) (Math.random() * 100);
     private User user;
     private String result = "";
-    private long timestamp;
-    private Long duration;
-    private double memoryPeak;
+    private BigDecimal timestamp;
+    private Integer duration;
+    private Long memoryPeak;
 
 
 
     public Transaction(String name) {
         this.name = name;
-        this.timestamp = Math.round(new Date().getTime() / 1000.0);
+        this.timestamp = TimesUtils.getTimestamp();
     }
     public void withUser(User user){
         this.user = user;
@@ -37,15 +41,16 @@ public class Transaction extends Context implements Transportable {
 
 
     public void end(){
-        this.end((new Date().getTime() / 1000) - this.timestamp);
+        BigDecimal end = TimesUtils.getTimestamp();
+        this.end(end.subtract(this.timestamp).multiply(BigDecimal.valueOf(1000)));
     }
 
-    public void end(long duration){
-        this.duration = duration;
+    public void end(BigDecimal duration){
+        this.duration = duration.intValue();
         this.memoryPeak = this.getMemoryPeak();
     }
 
-    public static double getMemoryPeak() {
+    public static long getMemoryPeak() {
         MemoryUsage heapMemoryUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
         return heapMemoryUsage.getUsed() /1000000;
     }
@@ -75,7 +80,6 @@ public class Transaction extends Context implements Transportable {
             .put("name", this.name)
             .put("type", this.type)
             .put("timestamp", this.timestamp)
-            .put("end",  this.timestamp + this.duration)
             .put("duration", this.duration)
             .put("result", this.result)
             .put("memory_peak", this.memoryPeak)

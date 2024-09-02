@@ -1,21 +1,25 @@
 package dev.inspector.agent.model;
 
 import dev.inspector.agent.utility.JsonBuilder;
+import dev.inspector.agent.utility.TimesUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
 
 public class Error extends Context implements Transportable  {
 
-    private long timestamp;
+    private BigDecimal timestamp;
     private TransactionIdentifier transaction;
     private Throwable error;
     private boolean handled;
 
 
     public Error(Throwable error, TransactionIdentifier transaction){
-        this.timestamp = Math.round(new Date().getTime() / 1000.0);
+        Instant now = Instant.now();
+        this.timestamp = TimesUtils.getTimestamp();
         this.error = error;
         this.transaction = transaction;
     }

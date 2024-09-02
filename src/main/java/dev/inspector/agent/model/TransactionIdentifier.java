@@ -3,13 +3,16 @@ package dev.inspector.agent.model;
 import dev.inspector.agent.utility.JsonBuilder;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+
 public class TransactionIdentifier {
     public String hash;
-    public long timestamp;
+    public BigDecimal timestamp;
     public String name;
 
-    public TransactionIdentifier(String hash, long timestamp, String name){
+    public TransactionIdentifier(String hash, BigDecimal timestamp, String name){
         this.hash = hash;
+        this.timestamp = timestamp;
         this.timestamp = timestamp;
         this.name = name;
     }
@@ -22,11 +25,11 @@ public class TransactionIdentifier {
         this.hash = hash;
     }
 
-    public long getTimestamp() {
+    public BigDecimal getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(BigDecimal timestamp) {
         this.timestamp = timestamp;
     }
 

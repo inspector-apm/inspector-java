@@ -37,6 +37,16 @@ public class Inspector {
         return segment;
     }
 
+
+    public Segment startSegment(String type){
+        if(!isRecording()){
+            throw new java.lang.Error("No active transaction found");
+        }
+        Segment segment = new Segment(transaction.getBasicTransactionInfo(), type);
+        addEntries(segment);
+        return segment;
+    }
+
     public boolean isRecording(){
         return transaction != null;
     }
