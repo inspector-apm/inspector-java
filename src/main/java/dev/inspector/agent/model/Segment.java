@@ -32,8 +32,9 @@ public class Segment extends Context implements Transportable {
         this.timestamp = TimesUtils.getTimestamp();
     }
 
-    public void start(){
+    public Segment start(){
         this.start = TimesUtils.getTimestamp().subtract(this.transaction.getTimestamp());
+        return this;
     }
 
 

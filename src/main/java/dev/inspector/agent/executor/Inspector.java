@@ -33,6 +33,7 @@ public class Inspector {
             throw new java.lang.Error("No active transaction found");
         }
         Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
+        segment.start();
         addEntries(segment);
         return segment;
     }
