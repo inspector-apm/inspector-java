@@ -16,6 +16,7 @@ public class Segment extends Context implements Transportable {
     private TransactionIdentifier transaction;
     private BigDecimal timestamp;
     private Integer duration;
+    private BigDecimal start;
 
 
     public Segment(TransactionIdentifier identifier, String type, String label){
@@ -31,6 +32,9 @@ public class Segment extends Context implements Transportable {
         this.timestamp = TimesUtils.getTimestamp();
     }
 
+    public void start(){
+        this.start = TimesUtils.getTimestamp().subtract(this.transaction.getTimestamp());
+    }
 
 
     public void end(){
@@ -50,7 +54,7 @@ public class Segment extends Context implements Transportable {
             .put("type", this.type)
             .put("label", this.label)
             .put("timestamp", this.timestamp)
-            .put("start",this.timestamp)
+            .put("start",this.start)
             .put("duration", this.duration)
             .put("context", super.context)
             .put("transaction", new JsonBuilder()
