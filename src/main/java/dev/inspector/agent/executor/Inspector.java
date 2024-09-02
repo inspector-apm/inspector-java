@@ -76,6 +76,7 @@ public class Inspector {
 
     public Segment addSegment(ElaborateSegment fn, String type, String label, boolean throwE) {
         Segment segment = startSegment(type, label);
+        segment.start();
         try {
             //TODO: anonymous function da implementare e cancellare ElaborateSegment
             return fn.execute(segment);
