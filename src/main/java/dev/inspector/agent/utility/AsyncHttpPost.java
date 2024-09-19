@@ -1,5 +1,8 @@
 package dev.inspector.agent.utility;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +15,9 @@ import java.util.concurrent.ExecutorService;
 
 public class AsyncHttpPost {
 
-    public static CompletableFuture<String> asyncHttpPost(String targetUrl, String jsonPayload, ExecutorService executor, String inspectorKey, String version) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AsyncHttpPost.class);
+
+    public CompletableFuture<String> asyncHttpPost(String targetUrl, String jsonPayload, ExecutorService executor, String inspectorKey, String version) {
         return CompletableFuture.supplyAsync(() -> {
             HttpURLConnection connection = null;
             try {
@@ -43,7 +48,7 @@ public class AsyncHttpPost {
                     return response.toString();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Error during http post request to {}", targetUrl, e);
                 return null;
             } finally {
                 if (connection != null) {

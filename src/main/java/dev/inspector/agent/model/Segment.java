@@ -5,8 +5,6 @@ import dev.inspector.agent.utility.TimesUtils;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.Date;
 
 public class Segment extends Context implements Transportable {
 
@@ -23,16 +21,15 @@ public class Segment extends Context implements Transportable {
         this.transaction = identifier;
         this.type = type;
         this.label = label;
-        this.timestamp = TimesUtils.getTimestamp();
     }
 
     public Segment(TransactionIdentifier identifier, String type) {
         this.transaction = identifier;
         this.type = type;
-        this.timestamp = TimesUtils.getTimestamp();
     }
 
     public Segment start(){
+        this.timestamp = TimesUtils.getTimestamp();
         this.start = TimesUtils.getTimestamp().subtract(this.transaction.getTimestamp());
         return this;
     }
