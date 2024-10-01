@@ -16,21 +16,18 @@ public class Inspector {
     private static Logger LOGGER = LoggerFactory.getLogger(Inspector.class);
 
     private Config inspectorConfig;
-    private Transport dataTransportService;
-    private ThreadLocal<Transaction> transactionThreadSafeWrapper;
+    private Transport transport;
+    private Transaction transaction;
     private ScheduledExecutorService scheduler;
 
     public Inspector(Config conf){
         this.inspectorConfig = conf;
-        dataTransportService = new AsyncTransport(inspectorConfig);
-        transactionThreadSafeWrapper = new ThreadLocal<>();
+        transport = new AsyncTransport(inspectorConfig);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
     public Transaction startTransaction(String name){
-        transactionThreadSafeWrapper.set(new Transaction(name));
-
-        Transaction transaction = transactionThreadSafeWrapper.get();
+        transaction = new Transaction(name);
         LOGGER.debug("Thread {}: Starting monitoring transaction {}", Thread.currentThread().getName(), transaction.getBasicTransactionInfo().getHash());
 
         addEntries(transaction);
@@ -43,14 +40,13 @@ public class Inspector {
             throw new IllegalStateException("No active transaction found");
         }
 
-        Transaction currentMonitoringTransaction = transactionThreadSafeWrapper.get();
         LOGGER.debug("Thread {}: Starting segment of type {} and label {} for transaction {}",
                 Thread.currentThread().getName(),
                 type,
                 label,
-                currentMonitoringTransaction.getBasicTransactionInfo().getHash()
+               transaction.getBasicTransactionInfo().getHash()
         );
-        Segment segment = new Segment(currentMonitoringTransaction.getBasicTransactionInfo(), type, label);
+        Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
         segment.start();
         addEntries(segment);
         return segment;
@@ -62,28 +58,27 @@ public class Inspector {
             throw new IllegalStateException("No active transaction found");
         }
 
-        Transaction currentMonitoringTransaction = transactionThreadSafeWrapper.get();
         LOGGER.debug("Thread {}: Starting segment of type {} for transaction {}",
                 Thread.currentThread().getName(),
                 type,
-                currentMonitoringTransaction.getBasicTransactionInfo().getHash()
+                transaction.getBasicTransactionInfo().getHash()
         );
-        Segment segment = new Segment(currentMonitoringTransaction.getBasicTransactionInfo(), type);
+        Segment segment = new Segment(transaction.getBasicTransactionInfo(), type);
         segment.start();
         addEntries(segment);
         return segment;
     }
 
     public boolean isRecording(){
-        return transactionThreadSafeWrapper.get() != null;
+        return transaction != null;
     }
 
 
     public void addEntries(Transportable data) {
-        if (dataTransportService.getQueueSize() >= inspectorConfig.getMaxEntries()) {
-            dataTransportService.flush();
+        if (transport.getQueueSize() >= inspectorConfig.getMaxEntries()) {
+            transport.flush();
         }
-        dataTransportService.addEntry(data);
+        transport.addEntry(data);
     }
 
     public void flush() {
@@ -92,15 +87,14 @@ public class Inspector {
             return;
         }
 
-        Transaction currentMonitoringTransaction = transactionThreadSafeWrapper.get();
 
-        if(!currentMonitoringTransaction.isEnded()){
-            currentMonitoringTransaction.end();
+        if(!transaction.isEnded()){
+            transaction.end();
         }
 
         LOGGER.debug("Thread {}: Flushing data to monitoring server", Thread.currentThread().getName());
-        dataTransportService.flush();
-        transactionThreadSafeWrapper.remove();
+        transport.flush();
+        transaction = null;
     }
 
 
@@ -134,7 +128,7 @@ public class Inspector {
     }
 
     public Transaction getTransaction() {
-        return transactionThreadSafeWrapper.get();
+        return transaction;
     }
 
     public Boolean hasTransaction() {

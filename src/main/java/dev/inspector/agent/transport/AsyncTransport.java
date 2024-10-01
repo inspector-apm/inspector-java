@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.*;
 
@@ -19,10 +20,10 @@ public class AsyncTransport implements Transport {
 
     public AsyncTransport(Config conf) {
         this.conf = conf;
-        this.queue = new ConcurrentLinkedQueue<>();
+        this.queue = new LinkedList<>();
     }
 
-    public synchronized void flush() {
+    public void flush() {
 
         LOGGER.debug("Thread {}: Flushing the transport queue. Queue size: {}", Thread.currentThread().getName(), getQueueSize());
         if (this.queue.isEmpty()) {
