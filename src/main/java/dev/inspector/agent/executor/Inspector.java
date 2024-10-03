@@ -4,6 +4,8 @@ import dev.inspector.agent.model.*;
 import dev.inspector.agent.transport.AsyncTransport;
 import dev.inspector.agent.model.Transportable;
 import dev.inspector.agent.transport.Transport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -11,27 +13,39 @@ import java.util.concurrent.TimeUnit;
 
 public class Inspector {
 
-    private Config conf;
+    private static Logger LOGGER = LoggerFactory.getLogger(Inspector.class);
+
+    private Config inspectorConfig;
     private Transport transport;
     private Transaction transaction;
     private ScheduledExecutorService scheduler;
 
     public Inspector(Config conf){
-        this.conf = conf;
-        transport = new AsyncTransport(conf);
+        this.inspectorConfig = conf;
+        transport = new AsyncTransport(inspectorConfig);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
     public Transaction startTransaction(String name){
         transaction = new Transaction(name);
+        LOGGER.debug("Thread {}: Starting monitoring transaction {}", Thread.currentThread().getName(), transaction.getBasicTransactionInfo().getHash());
+
         addEntries(transaction);
+
         return transaction;
     }
 
     public Segment startSegment(String type, String label){
         if(!isRecording()){
-            throw new java.lang.Error("No active transaction found");
+            throw new IllegalStateException("No active transaction found");
         }
+
+        LOGGER.debug("Thread {}: Starting segment of type {} and label {} for transaction {}",
+                Thread.currentThread().getName(),
+                type,
+                label,
+               transaction.getBasicTransactionInfo().getHash()
+        );
         Segment segment = new Segment(transaction.getBasicTransactionInfo(), type, label);
         segment.start();
         addEntries(segment);
@@ -41,9 +55,16 @@ public class Inspector {
 
     public Segment startSegment(String type){
         if(!isRecording()){
-            throw new java.lang.Error("No active transaction found");
+            throw new IllegalStateException("No active transaction found");
         }
+
+        LOGGER.debug("Thread {}: Starting segment of type {} for transaction {}",
+                Thread.currentThread().getName(),
+                type,
+                transaction.getBasicTransactionInfo().getHash()
+        );
         Segment segment = new Segment(transaction.getBasicTransactionInfo(), type);
+        segment.start();
         addEntries(segment);
         return segment;
     }
@@ -54,31 +75,32 @@ public class Inspector {
 
 
     public void addEntries(Transportable data) {
-        while(transport.getQueueSize() >= conf.getMaxEntries()){
-            transport.flush();
+        if (transport.getQueueSize() < inspectorConfig.getMaxEntries()) {
+            transport.addEntry(data);
         }
-        transport.addEntry(data);
     }
 
+    public void flush() {
+        if(!inspectorConfig.isEnabled() || !isRecording()) {
+            LOGGER.debug("Thread {}: No active transactions found to flush!", Thread.currentThread().getName());
+            return;
+        }
 
-
-    public void flush(){
-        if(!conf.isEnabled() || !isRecording()) return;
 
         if(!transaction.isEnded()){
             transaction.end();
         }
+
+        LOGGER.debug("Thread {}: Flushing data to monitoring server", Thread.currentThread().getName());
         transport.flush();
         transaction = null;
     }
-
 
 
     public Segment addSegment(ElaborateSegment fn, String type, String label, boolean throwE) {
         Segment segment = startSegment(type, label);
         segment.start();
         try {
-            //TODO: anonymous function da implementare e cancellare ElaborateSegment
             return fn.execute(segment);
         } catch (Exception e) {
             reportException(e);
@@ -97,8 +119,9 @@ public class Inspector {
             startTransaction(e.getClass().getSimpleName());
         }
         Segment segment = startSegment("exception", e.getMessage());
+        Transaction currentMonitoringTransaction = getTransaction();
 
-        Error error = new Error(e, transaction.getBasicTransactionInfo());
+        Error error = new Error(e, currentMonitoringTransaction.getBasicTransactionInfo());
         addEntries(error);
         segment.end();
     }
@@ -108,7 +131,7 @@ public class Inspector {
     }
 
     public Boolean hasTransaction() {
-       return (null != this.transaction);
+       return (this.getTransaction() != null);
     }
 
     public void shutdown() {
