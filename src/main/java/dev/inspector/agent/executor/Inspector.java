@@ -75,10 +75,9 @@ public class Inspector {
 
 
     public void addEntries(Transportable data) {
-        if (transport.getQueueSize() >= inspectorConfig.getMaxEntries()) {
-            transport.flush();
+        if (transport.getQueueSize() < inspectorConfig.getMaxEntries()) {
+            transport.addEntry(data);
         }
-        transport.addEntry(data);
     }
 
     public void flush() {
