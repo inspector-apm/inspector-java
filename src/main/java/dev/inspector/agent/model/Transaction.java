@@ -16,7 +16,7 @@ public class Transaction extends Context implements Transportable {
 
     private static Logger LOGGER = LoggerFactory.getLogger(Transaction.class);
     private String model = "transaction";
-    private String type = "request";
+    private TransactionType type;
     private String name;
     private String hash = System.currentTimeMillis() + "" + (int) (Math.random() * 100);
     private User user;
@@ -28,23 +28,38 @@ public class Transaction extends Context implements Transportable {
     public Transaction(String name) {
         this.name = name;
         this.timestamp = TimesUtils.getTimestamp();
+        type = TransactionType.GENERAL;
     }
-    public void withUser(User user){
+    public Transaction withUser(User user){
         this.user = user;
+
+        return this;
     }
 
-    public void setResult(String result){
+    public Transaction withType(TransactionType type) {
+        this.type = type;
+
+        return this;
+    }
+
+    public Transaction setResult(String result){
         this.result = result;
+
+        return this;
     }
 
-    public void end(){
+    public Transaction end(){
         BigDecimal end = TimesUtils.getTimestamp();
         this.end(end.subtract(this.timestamp).multiply(BigDecimal.valueOf(1000)));
+
+        return this;
     }
 
-    public void end(BigDecimal duration){
+    public Transaction end(BigDecimal duration){
         this.durationInMillis = duration.longValue();
         this.memoryPeak = this.getMemoryPeak();
+
+        return this;
     }
 
     public static long getMemoryPeak() {
@@ -75,7 +90,7 @@ public class Transaction extends Context implements Transportable {
             .put("model", this.model)
             .put("hash", this.hash)
             .put("name", this.name)
-            .put("type", this.type)
+            .put("type", this.type.getType())
             .put("timestamp", this.timestamp)
             .put("duration", this.durationInMillis)
             .put("result", this.result)
