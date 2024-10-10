@@ -4,7 +4,7 @@
 
   <groupId>dev.inspector</groupId>
   <artifactId>agent</artifactId>
-  <version>0.0.6</version>
+  <version>0.1.4</version>
 
   <name>agent</name>
 
