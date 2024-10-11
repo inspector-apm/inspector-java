@@ -7,10 +7,12 @@ public class Config {
     private Boolean enabled = true;
 
     private Integer maxEntries = 100;
-    private String version = "1.9.10";
+    private String version;
 
     public Config(String ingestionKey){
         this.ingestionKey = ingestionKey;
+        this.version = "0.0.5";
+        this.url = "https://ingest.inspector.dev";
     }
 
 
