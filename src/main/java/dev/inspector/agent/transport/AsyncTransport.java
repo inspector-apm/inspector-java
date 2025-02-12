@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.*;
@@ -52,7 +53,7 @@ public class AsyncTransport implements Transport {
         AsyncHttpPost httpHandler = new AsyncHttpPost();
         ExecutorService executor = Executors.newFixedThreadPool(10);
 
-        String jsonPayload = items.toString();
+        String jsonPayload = Base64.getUrlEncoder().encodeToString(items.toString().getBytes());
 
         CompletableFuture<String> response = httpHandler.asyncHttpPost(this.conf.getUrl(), jsonPayload, executor, this.conf.getIngestionKey(), this.conf.getVersion());
 
